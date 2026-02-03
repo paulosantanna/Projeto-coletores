@@ -1,35 +1,19 @@
 name: Push Modules Automatically
-
 on:
-  workflow_dispatch:  # Permite disparar manualmente no GitHub
-
+  workflow_dispatch:
 jobs:
   push-modules:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Copy Module Files
-        run: |
-          # Aqui você copia os arquivos do módulo que já estão no repo ou gera arquivos exemplo
-          mkdir -p backend_module
-          echo "# Backend Module" > backend_module/README.md
-          mkdir -p mobile_module
-          echo "# Mobile Module" > mobile_module/README.md
-          mkdir -p infra_module
-          echo "# Infra Module" > infra_module/README.md
-
+      - uses: actions/checkout@v3
       - name: Configure Git
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-
-      - name: Commit and Push Changes
+      - name: Commit and Push
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git add .
-          git commit -m "Add new modules via workflow" || echo "No changes to commit"
+          git commit -m "Add modules via workflow" || echo "No changes"
           git push https://x-access-token:${GH_TOKEN}@github.com/paulosantanna/Projeto-coletores.git HEAD:main
